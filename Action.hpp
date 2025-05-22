@@ -25,6 +25,8 @@ class Action{
         virtual ~Action();
 
         virtual void execute() = 0;
+
+        player::Player* getSource();
 };
 }
 

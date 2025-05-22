@@ -20,6 +20,21 @@ namespace player{
         int Player:: get_coins(){
             return coins;
         }
+    
+        // Set current player's total coins
+        void Player::set_coins(int amount){
+            this->coins = this->coins + amount;
+        }
+
+        // Return true if the player is in sancion
+        bool Player::get_sanction(){
+            return this->sanction;
+        }
+
+        // change place
+        void Player::do_sanction(){
+            this->sanction = false;
+        }
 
 
 }

@@ -23,9 +23,10 @@ public:
     ~Player();
 
         int get_coins(); // Return current player's total coins
-        // void removeEdge(int src, int dst);
-        // void printGraph();
-        // Node* findNodeInGraph(int id);
+        void set_coins(int amount); // Set current player's total coins
+        bool get_sanction(); // Return true if the player is in sancion
+        void do_sanction(); // do sanction
+
 };
 }
 

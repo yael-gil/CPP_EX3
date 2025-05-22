@@ -11,4 +11,8 @@ namespace action {
     }
 
     Action::~Action() {}
+
+    Action::player::Player* get_source(){
+        return this->source;
+    }
 }
