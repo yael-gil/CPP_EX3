@@ -19,9 +19,12 @@ namespace action{
   //The player takes two coin from the pot, the action can be blocked by "sanction"
   void action::Tax::execute(){
     if (!this->get_source()->get_sanction()){ // Checks if the player has been sanction
+      
       if(this->get_source()->get_roll() == "Governor"){
-        this->get_source()->set_coins(3); // Add 3 coins   
+        this->get_source()->set_coins(3); // Add 3 coins  
+        return; 
       }
+      //להוסיף מעבר על התור ששואל את הניצבים אם לחסום את הפעולה
       this->get_source()->set_coins(2); // Add 2 coins 
     }
     else {

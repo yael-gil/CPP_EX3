@@ -9,17 +9,17 @@
 #include "Governor.hpp"
 
 namespace player{
-    
-    Governor::Governor(std::string name, game::Game* game): Player(name, game){
-        action_name = "Governor";
+
+
+    Governor::Governor(std::string name, game::Game* game, const std::string& roll_name): Player(name, game, "Governor"){
     }
     
 
     Governor:: ~Governor(){}
            
-    //Return player's roll 
-    std::string Player::get_roll(){
-        return this->roll_name;
+    bool Governor::block_tax(bool block){
+            
+        return block;
     }
     
 

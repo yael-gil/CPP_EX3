@@ -7,12 +7,13 @@ namespace player{
     
     int Player::ID = 0;
 
-        Player:: Player(std::string name, game::Game *gamee) {
+        Player::Player(std::string name, game::Game *game, const std::string& roll_name): roll_name(roll_name) {
             this->name = name;
             id = ID++;
             coins = 0; //Intializing the coins to 0 
-            sanction = true; 
-            game = game;
+            sanction = false; 
+            this->game = game;
+       
         }
 
         Player::~Player() {
@@ -39,6 +40,9 @@ namespace player{
         }
         
         
-
+    //Return player's roll 
+    std::string Player::get_roll(){ 
+        return this->roll_name;
+    }
 
 }

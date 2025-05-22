@@ -16,7 +16,7 @@ class Governor : public Player{
 
     private:
 
-    const std::string& action_name;
+
 
     public:
  
@@ -25,7 +25,8 @@ class Governor : public Player{
 
         virtual ~Governor();
 
-        std::string get_roll(); //Return player's roll 
+        bool block_tax(bool block);
+\
 
 };
 }
