@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include "Game.hpp"
 namespace player{
 
 
@@ -13,13 +14,16 @@ class Player{
 private:
     static int ID; // ID to player
     std::string name;
-    int coins; //Current player's total coins
-    bool sanction;
+    int coins; // Current player's total coins
+    bool sanction;  
+    game::Game* game;
+   // const std::string& roll_name;      
+
 public:
  
     int id; //save current player's id   
 
-    Player(std::string name); 
+    Player(std::string name, game::Game *game); 
     ~Player();
 
         int get_coins(); // Return current player's total coins
