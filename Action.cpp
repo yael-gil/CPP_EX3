@@ -12,7 +12,14 @@ namespace action {
 
     Action::~Action() {}
 
-    Action::player::Player* get_source(){
+    //Return action's source
+    player::Player* Action::get_source(){
         return this->source;
     }
+
+    //Return action's game
+    game::Game* Action::get_action_game(){
+        return this->game;
+    }
+
 }

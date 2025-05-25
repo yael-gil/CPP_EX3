@@ -26,7 +26,10 @@ class Action{
 
         virtual void execute() = 0;
 
-        player::Player* get_source();
+        player::Player* get_source(); //Return action's source
+
+        game::Game* get_action_game(); //Return action's game
+
 };
 }
 

@@ -13,7 +13,7 @@ namespace player{
             coins = 0; //Intializing the coins to 0 
             sanction = false; 
             this->game = game;
-       
+            *game->add_player(this); // Add the player to the current game
         }
 
         Player::~Player() {
@@ -36,7 +36,7 @@ namespace player{
 
         // change place
         void Player::do_sanction(){
-            this->sanction = false;
+            this->sanction = true;
         }
         
         
@@ -44,5 +44,17 @@ namespace player{
     std::string Player::get_roll(){ 
         return this->roll_name;
     }
+
+    // Return the player's name
+    std::string Player::get_name(){
+        return this->name;
+    }
+
+    //Does nothing if not governor
+    bool Player::block_tax(Player* player){
+            
+        return false;
+    }
+
 
 }

@@ -31,7 +31,8 @@ public:
         bool get_sanction(); // Return true if the player is in sancion
         void do_sanction(); // do sanction
         virtual std::string get_roll(); //Return player's roll 
-
+        std::string get_name(); // Return the player's name
+        virtual bool block_tax(Player* player); //Block for Governor
 
 };
 }

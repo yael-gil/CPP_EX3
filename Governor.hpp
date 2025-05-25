@@ -21,12 +21,12 @@ class Governor : public Player{
     public:
  
 
-        Governor(std::string name, game::Game *game, const std::string& roll_name);
+        Governor(std::string name, game::Game *game);
 
         virtual ~Governor();
 
-        bool block_tax(bool block);
-\
+        bool block_tax(Player* player) override;
+
 
 };
 }
