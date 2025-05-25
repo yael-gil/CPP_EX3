@@ -19,7 +19,7 @@ class Gather : public Action{
     public:
  
 
-        Gather(game::Game* game, player::Player* source, std::string name, const std::string& action_name);
+        Gather(game::Game* game, player::Player* source, std::string name);
 
         virtual ~Gather();
 

@@ -25,6 +25,15 @@ namespace game{
         }
         this->players.push_back(player); // Add a new player to the game
     }
+
+    //Create the turn vector
+    std::vector<player::Player*> Game::create_turns(){
+        for(int i = 0; i < this->players.size(); i++){
+            this->turn[i] = this->players[i];
+        }
+        return this->turn;
+    } 
+
         
     const std::vector<player::Player*> Game::get_palyer_in_game(std::string& roll){
         std::vector<player::Player*> return_roll; 
@@ -35,5 +44,23 @@ namespace game{
         }
         return return_roll;
     }
+
+    // Return current turn
+    player::Player* Game::turns(){
+        if(!turn.empty()){
+        player::Player* current = turn.front();
+        turn.erase(turn.begin());
+        return current;
+        }
+        return nullptr;
+    } 
+    
+    //Get the turn vector
+    std::vector<player::Player*> Game::get_turns(){
+        return this->turn;
+    } 
+
+
+    
 
 }

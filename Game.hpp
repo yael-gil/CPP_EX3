@@ -16,6 +16,8 @@ private:
     static int ID; // ID to game
     std::string name; // Game's name
     std::vector<player::Player*> players; // list of the players
+    std::vector<player::Player*> turn; // List for turns
+
 
 public:
  
@@ -27,6 +29,12 @@ public:
     void add_player(player::Player* player); // Add player to the game
 
     const std::vector<player::Player*> get_palyer_in_game(std::string& roll); //Return specific player by roll
+
+    std::vector<player::Player*> create_turns(); //Create the turn vector
+
+    std::vector<player::Player*> get_turns(); //Get the turn vector
+
+    player::Player* turns();// Return current turn
 
 };
 }

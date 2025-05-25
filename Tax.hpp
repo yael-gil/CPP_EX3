@@ -19,7 +19,7 @@ class Tax : public Action{
     public:
  
 
-        Tax(game::Game* game, player::Player* source, std::string name, const std::string& action_name);
+        Tax(game::Game* game, player::Player* source, std::string name);
 
         virtual ~Tax();
 

@@ -10,7 +10,7 @@
 namespace action{
  
 
-  Gather::Gather(game::Game* game, player::Player* source, std::string name, const std::string& gather) : Action( game, source, name, gather){
+  Gather::Gather(game::Game* game, player::Player* source, std::string name) : Action( game, source, name, "Gather"){
     }        
     
   Gather::~Gather(){}

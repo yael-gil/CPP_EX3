@@ -11,7 +11,7 @@
 namespace action{
  
 
-  Tax::Tax(game::Game* game, player::Player* source, std::string name, const std::string& gather) : Action( game, source, name, gather){
+  Tax::Tax(game::Game* game, player::Player* source, std::string name) : Action( game, source, name, "Tax"){
     }        
     
   Tax::~Tax(){}
