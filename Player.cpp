@@ -7,7 +7,7 @@ namespace player{
     
     int Player::ID = 0;
 
-        Player::Player(std::string name, game::Game *game, const std::string& roll_name): roll_name(roll_name) {
+        Player::Player(std::string name, game::Game *game, const std::string& role_name): role_name(role_name) {
             this->name = name;
             id = ID++;
             coins = 0; //Intializing the coins to 0 
@@ -35,14 +35,14 @@ namespace player{
         }
 
         // change place
-        void Player::do_sanction(){
-            this->sanction = true;
+        void Player::set_sanction(bool sanction){
+            this->sanction = sanction;
         }
         
         
-    //Return player's roll 
-    std::string Player::get_roll(){ 
-        return this->roll_name;
+    //Return player's role 
+    std::string Player::get_role(){ 
+        return this->role_name;
     }
 
     // Return the player's name

@@ -10,9 +10,8 @@
 namespace action{
  
 
-  Gather::Gather(game::Game* game, player::Player* source, std::string name) : Action( game, source, name, "Gather"){
-    }        
-    
+  Gather::Gather(game::Game* game, player::Player* source) : Action( game, source,"Gather"){}        
+     
   Gather::~Gather(){}
    
   //The player takes one coin from the pot, the action can be blocked by "sanction"
@@ -22,6 +21,10 @@ namespace action{
     } else {
         throw std::runtime_error("You are blocked! cannot use gather.");
     }
+  }
+
+   void execute(player::Player* target) {
+    throw std::runtime_error("Gather is not performed on another player.");
   }
  
 }

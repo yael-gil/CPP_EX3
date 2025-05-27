@@ -19,12 +19,14 @@ class Tax : public Action{
     public:
  
 
-        Tax(game::Game* game, player::Player* source, std::string name);
+        Tax(game::Game* game, player::Player* source);
 
         virtual ~Tax();
 
 
         void execute() override; //The player takes two coin from the pot, the action can be blocked by "sanction"
+
+        void execute(player::Player* target) override; // return expretion
 
 };
 }

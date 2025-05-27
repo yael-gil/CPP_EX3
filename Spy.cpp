@@ -11,7 +11,7 @@
 namespace player{
 
 
-    Spy::Spy(std::string name, game::Game* game, const std::string& roll_name): Player(name, game, "Spy"){
+    Spy::Spy(std::string name, game::Game* game, const std::string& role_name): Player(name, game, "Spy"){
     }
     
 

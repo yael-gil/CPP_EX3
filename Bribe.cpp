@@ -11,7 +11,7 @@
 namespace action{
  
 
-  Bribe::Bribe(game::Game* game, player::Player* source, std::string name) : Action( game, source, name, "Bribe"){
+  Bribe::Bribe(game::Game* game, player::Player* source) : Action( game, source, "Bribe"){
     }        
     
   Bribe::~Bribe(){}
@@ -29,4 +29,8 @@ namespace action{
   }
  
 }
+  //Bribe is not performed on another player
+  void execute(player::Player* target) {
+    throw std::runtime_error("Bribe is not performed on another player.");
+  }
 }

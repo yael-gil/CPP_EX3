@@ -15,16 +15,17 @@ class Action{
     private:
     game::Game* game;
     player::Player* source;
-    std::string name;
-    const std::string& action_name  ;      
+    const std::string action_name;      
 
     public:
  
 
-        Action(game::Game* game, player::Player* source, std::string name, const std::string& action_name); 
+        Action(game::Game* game, player::Player* source,  const std::string &action_name); 
         virtual ~Action();
 
         virtual void execute() = 0;
+
+        virtual void execute(player::Player* target) = 0;
 
         player::Player* get_source(); //Return action's source
 

@@ -6,8 +6,8 @@
 
 namespace action {
 
-    Action::Action(game::Game *game, player::Player *source, std::string name, const std::string &action_name)
-    : game(game), source(source), name(name), action_name(action_name){
+    Action::Action(game::Game *game, player::Player *source, const std::string &action_name)
+    : game(game), source(source), action_name(action_name){
     }
 
     Action::~Action() {}

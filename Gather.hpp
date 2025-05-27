@@ -19,13 +19,14 @@ class Gather : public Action{
     public:
  
 
-        Gather(game::Game* game, player::Player* source, std::string name);
+        Gather(game::Game* game, player::Player* source);
 
         virtual ~Gather();
 
 
         void execute() override; //The player takes one coin from the pot, the action can be blocked by "sanction"
 
+        void execute(player::Player* target) override; // return expretion
 };
 }
 

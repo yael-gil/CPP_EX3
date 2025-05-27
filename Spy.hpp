@@ -20,7 +20,7 @@ class Spy : public Player{
     public:
  
 
-        Spy(std::string name, game::Game *game, const std::string& roll_name);
+        Spy(std::string name, game::Game *game, const std::string& role_name);
 
         virtual ~Spy();
 

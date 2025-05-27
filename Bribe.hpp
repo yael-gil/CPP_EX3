@@ -19,12 +19,15 @@ class Bribe : public Action{
     public:
  
 
-        Bribe(game::Game* game, player::Player* source, std::string name);
+        Bribe(game::Game* game, player::Player* source);
 
         virtual ~Bribe();
 
 
         void execute() override; //The player pays 4 coins to the pot and gets a double turn (total of 3 turns)
+
+        void execute(player::Player* target) override; // return expretion
+
 
 };
 }
