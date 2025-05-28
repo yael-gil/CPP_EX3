@@ -1,13 +1,14 @@
 //yaeldorani@gmail.com
+#include <iostream>
 
 #include "Game.hpp"
-#include <iostream>
 #include "Action.hpp"
 #include "Gather.hpp"
 #include "Tax.hpp"
 #include "Arrest.hpp"
 #include "Bribe.hpp"
-
+#include "Sanction.hpp"
+#include "Coup.hpp"
 
 namespace game{
     
@@ -16,7 +17,6 @@ namespace game{
     Game:: Game(std::string& game_name){
 
         name = game_name;
-        std::vector<player::Player*> players; // List of the players
         id = ID++;
         last_arrest = "none";
     }
@@ -27,7 +27,7 @@ namespace game{
     void Game::add_player(player::Player* player){
         for (int i = 0; i < this->players.size(); i++){
             if(players[i]->get_name() == player->get_name()){ //If player's name == player's name in game, add to the list
-                throw std::runtime_error("This name is taken, there is a player in the curremt game with that name. \n"
+                throw std::runtime_error("This name is taken, there is a player in the current game with that name. \n"
                     "Please choose a different name.");
             }
         }
@@ -36,14 +36,14 @@ namespace game{
 
     //Create the turn vector
     std::vector<player::Player*> Game::create_turns(){
-        for(int i = 0; i < this->players.size(); i++){
-            this->turn[i] = this->players[i];
-        }
+        
+            this->turn = this->players;
+       
         return this->turn;
     } 
 
     //Returns all players in the game wuth a specific role
-    const std::vector<player::Player*> Game::get_palyer_in_game_by_role(std::string& role){
+    const std::vector<player::Player*> Game::get_player_in_game_by_role(std::string& role){
         std::vector<player::Player*> return_role; 
         for (int i = 0; i < this->players.size(); i++){
             if(players[i]->get_role() == role){ //If player's role == role, add to the list
@@ -54,7 +54,7 @@ namespace game{
     }
 
     //Return all players in the game
-    const std::vector<player::Player*> Game::get_palyer_in_game(){
+    const std::vector<player::Player*> Game::get_player_in_game(){
     
         return this->players;
     }
@@ -86,7 +86,7 @@ namespace game{
         
         this->create_turns(); //At the beginning of the game, a create turn 
 
-        while(this->players.size() > 1){ // If there is 1 player, game over
+        while(this->turn.size() > 1){ // If there is 1 player, game over
         
             
             player::Player* current_player = this->turns(); // get the current turn
@@ -129,13 +129,11 @@ namespace game{
             return 6;
         }
 
-        bool good[6]; //Keeps the numbers of actions the player can do
-        for(int i = 0; i < 7; i++){
-            good[i] = false;
-        }
+        bool good[7] = {false}; //Keeps the numbers of actions the player can do
+     
 
         if(current->get_sanction()){
-            std::cout<<"You are blocked! cannot use gather.";
+            std::cout<<"You are blocked! cannot use gather."<<std::endl;
         }
         if(!current->get_sanction()){    
             std::cout<<"1: Gather"<<std::endl;
@@ -166,14 +164,15 @@ namespace game{
 
         //Current player choose action
         int action;
-        std::cin >> action;
-        
-        if(good[action] == false){
-            std::cout<<"C'ant use this action, please choose another action.";
-            choose_action(current);
-        }
 
-        return action;
+        while(true){
+            std::cin >> action;
+
+            if(action >= 1 && action <= 6 && good[action]){
+                return action;
+            }
+            std::cout<<"Can't use this action, please choose another action."<<std::endl;
+            }
     }
     
     void Game::do_action(player::Player* current_player, int action){
@@ -182,7 +181,7 @@ namespace game{
         {
             case 1: {
                 if(current_player->get_sanction()){
-                   std::cout<<"You are blocked! cannot use gather.";
+                   std::cout<<"You are blocked! cannot use gather."<<std::endl;
                    int new_action = choose_action(current_player);
                    do_action(current_player, new_action);
                    break;
@@ -195,7 +194,7 @@ namespace game{
 
             case 2: {
                 if(current_player->get_sanction()){
-                    std::cout<<"You are blocked! cannot use tax.";
+                    std::cout<<"You are blocked! cannot use tax."<<std::endl;
                     int new_action = choose_action(current_player);
                     do_action(current_player, new_action);
                     break;
@@ -208,21 +207,24 @@ namespace game{
             case 3: {
                 action::Arrest arrest(this, current_player);
                 
-                std::cout<<"Choose player to attact: "<<std::endl;
+                std::cout<<"Choose player to attack: "<<std::endl;
 
-                for (int i = 0; i < this->get_palyer_in_game().size(); i++){
-                    std::cout<<i+1<<": "<<this->get_palyer_in_game()[i];
+                for (int i = 0; i < this->get_player_in_game().size(); i++){
+                    std::cout<<i+1<<": "<<this->get_player_in_game()[i]->get_name();
                 }
                 int target;
                 std::cin >> target;
-
-                arrest.execute(this->get_palyer_in_game()[target-1]);
+                while(target < 1 || target > this->players.size()){
+                    std::cout<<"Invalid target! please try again."<<std::endl;
+                    std::cin >> target;
+                }
+                arrest.execute(this->get_player_in_game()[target-1]);
                 break;
             }
             
             case 4: {
                 if(current_player->get_coins() < 4){
-                    std::cout<<"C'ant use bribe, you d'ont have enough money."
+                    std::cout<<"Can't use bribe, you don't have enough money."<<std::endl;
                     choose_action(current_player);
                     break;
                 }
@@ -232,17 +234,18 @@ namespace game{
             }
             case 5: {
                 if(current_player->get_coins() < 3){
-                    std::cout<<"C'ant use sanction, you d'ont have enough money."
+                    std::cout<<"Can't use sanction, you don't have enough money."<<std::endl;
                     choose_action(current_player);
                     break;
                 }
+
                 action::Sanction sanction(this, current_player);
-                Sanction.execute();
+                sanction.execute();
                 break;
             }
             case 6: {
                 if(current_player->get_coins() < 7){
-                    std::cout<<"C'ant use coup, you d'ont have enough money."
+                    std::cout<<"Can't use coup, you don't have enough money."<<std::endl;
                     choose_action(current_player);
                     break;
                 }

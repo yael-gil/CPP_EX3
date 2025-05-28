@@ -25,17 +25,17 @@ namespace action{
 
         if (target != nullptr){ 
           target->set_coins(-7); //Pay 7 coin 
-          player::Player* begin = this->get_action_game()->get_palyer_in_game->begin();
-          player::Player* end = this->get_action_game()->get_palyer_in_game->end();
+          player::Player* begin = this->get_action_game()->get_player_in_game->begin();
+          player::Player* end = this->get_action_game()->get_player_in_game->end();
 
-          this->get_action_game()->get_palyer_in_game()->erase(std::remove(begin, end, target), end); //remove the target from the players list
+          this->get_action_game()->get_player_in_game()->erase(std::remove(begin, end, target), end); //remove the target from the players list
           this->get_action_game()->get_turns()->erase(std::remove(begin, end, target), end); // remove the target from the turn
 
           std::cout<<"Player "<<target->get_name()<<" exited the game by "<<current->get_name()<<std::endl; 
           
           std::cout<<" Players remaining in the game: "<<std::endl; //Print the player that remaining the game
-          for(int i = 0; i < this->get_action_game()->get_palyer_in_game()->size(); i++){
-            std::cout<<this->get_action_game()->get_palyer_in_game()[i]->get_name()<<std::endl;
+          for(int i = 0; i < this->get_action_game()->get_player_in_game()->size(); i++){
+            std::cout<<this->get_action_game()->get_player_in_game()[i]->get_name()<<std::endl;
           }
         }
       else{

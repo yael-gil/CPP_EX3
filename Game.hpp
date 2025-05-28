@@ -28,9 +28,9 @@ public:
 
     void add_player(player::Player* player); // Add player to the game
 
-    const std::vector<player::Player*> get_palyer_in_game_by_role(std::string& role); //Return specific player by role
+    const std::vector<player::Player*> get_player_in_game_by_role(std::string& role); //Return specific player by role
 
-    const std::vector<player::Player*> get_palyer_in_game(); //Return all players in the game
+    const std::vector<player::Player*> get_player_in_game(); //Return all players in the game
 
     std::vector<player::Player*> create_turns(); //Create the turn vector
 

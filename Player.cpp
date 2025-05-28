@@ -1,7 +1,10 @@
 //yaeldorani@gmail.com
 
-#include "Player.hpp"
 #include <iostream>
+#include <random>
+
+#include "Player.hpp"
+#include "Enum_role.cpp"
 
 namespace player{
     
@@ -13,12 +16,38 @@ namespace player{
             coins = 0; //Intializing the coins to 0 
             sanction = false; 
             this->game = game;
+            this->set_role(get_random_role());//Initilize role
             *game->add_player(this); // Add the player to the current game
         }
 
         Player::~Player() {
 
         }
+
+        //Returns player's role 
+        Enum_role Player::get_role() const {
+            return this->role;
+        }
+
+        //Set player's role
+        void Player::set_role (Enum_role role){
+            if(this->role_set){
+                throw std::runtime_error("Role has already been set and cannot be changed.");
+            }
+            this->role = role;
+            role_set = true;
+        }
+
+        //Rerurns randon number for role
+        Enum_role Player::get_random_role(){
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+            static std::uniform_int_distribution<>dis(0,5);
+        
+            return static_cast<Enum_role>(dis(gen));
+        
+        }
+
 
         int Player:: get_coins(){
             return coins;
@@ -39,11 +68,7 @@ namespace player{
             this->sanction = sanction;
         }
         
-        
-    //Return player's role 
-    std::string Player::get_role(){ 
-        return this->role_name;
-    }
+
 
     // Return the player's name
     std::string Player::get_name(){
@@ -58,3 +83,4 @@ namespace player{
 
 
 }
+

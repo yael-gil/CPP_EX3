@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 #include "Tax.hpp"
-
+#include "Enum_role.cpp"
 
 namespace action{
  
@@ -20,13 +20,13 @@ namespace action{
   void action::Tax::execute(){
     if (!this->get_source()->get_sanction()){ // Checks if the player has been sanction
       
-      if(this->get_source()->get_role() == "Governor"){
+      if(this->get_source()->get_role() == Enum_role::Governor){
         this->get_source()->set_coins(3); // Add 3 coins  
         return; 
       }
 
       // Find governor in game להוציא החוצה? לחשב את הכל כבר במחלקת המשחק?
-      std::vector<player::Player*> governor_in_game = this->get_action_game()->get_palyer_in_game_by_role("Governor");
+      std::vector<player::Player*> governor_in_game = this->get_action_game()->get_player_in_game_by_role("Governor");
       
       // Ask governors to block
       for(int i = 0; i < governor_in_game.size(); i++){
