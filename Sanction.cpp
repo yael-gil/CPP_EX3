@@ -22,7 +22,7 @@ void Sanction::execute(player::Player* target){
     player:: Player* current = this->get_source();
 
     if (target != nullptr){ 
-        target->set_coins(-3); //Take 3 coins from the target
+        target->set_coins(-3); //Pay 3 coins
         target->set_sanction(true);
     }
 

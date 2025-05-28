@@ -44,7 +44,7 @@ public:
 
     void play_game();
 
-    int choose_action(); // Player choose action
+    int choose_action(player::Player* current); // Player choose action
 
     void do_action(player::Player* current_player, int action); //Do action acording to choose_action
 };

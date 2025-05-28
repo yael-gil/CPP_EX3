@@ -97,7 +97,9 @@ namespace game{
 
             //add swich case by role to spaicel actions
 
-            int action = choose_action();
+            
+
+            int action = choose_action(current_player);
 
             //Do action acording to player's decision
             do_action(current_player, action);
@@ -106,7 +108,7 @@ namespace game{
             if (current_player->get_sanction()){
                 current_player->set_sanction(false);
             }
-            
+
             //Add player to end of the turn
             this->turn.push_back(current_player);
        }
@@ -117,21 +119,60 @@ namespace game{
 
     }
 
-    int Game::choose_action(){
+    int Game::choose_action(player::Player* current){
         //print action
         std::cout<<"Choose Action: (number)"<<std::endl;
 
-        std::cout<<"1: Gather"<<std::endl;
-        std::cout<<"2: Tax"<<std::endl;
+
+        if (current->get_coins() >= 10){
+            std::cout<<"You have more than 10 coins, you must do coup."<<std::endl;
+            return 6;
+        }
+
+        bool good[6]; //Keeps the numbers of actions the player can do
+        for(int i = 0; i < 7; i++){
+            good[i] = false;
+        }
+
+        if(current->get_sanction()){
+            std::cout<<"You are blocked! cannot use gather.";
+        }
+        if(!current->get_sanction()){    
+            std::cout<<"1: Gather"<<std::endl;
+            std::cout<<"2: Tax"<<std::endl;
+            good[1] = true;
+            good[2] = true;
+        }
+        
         std::cout<<"3: Arrest"<<std::endl;
-        std::cout<<"4: Bribe"<<std::endl;
-        std::cout<<"5: Sanction"<<std::endl;
-        std::cout<<"6: Coup"<<std::endl;
+        good[3] = true;
+
+        if(current->get_coins() >= 4){
+            std::cout<<"4: Bribe"<<std::endl;
+            good[4] = true;
+
+        }
+
+        if(current->get_coins() >= 3){
+            std::cout<<"5: Sanction"<<std::endl;
+            good[5] = true;
+
+        }
+
+        if(current->get_coins() >= 7){
+            std::cout<<"6: Coup"<<std::endl;
+            good[6] = true;
+        }
 
         //Current player choose action
         int action;
         std::cin >> action;
         
+        if(good[action] == false){
+            std::cout<<"C'ant use this action, please choose another action.";
+            choose_action(current);
+        }
+
         return action;
     }
     
@@ -142,7 +183,7 @@ namespace game{
             case 1: {
                 if(current_player->get_sanction()){
                    std::cout<<"You are blocked! cannot use gather.";
-                   int new_action = choose_action();
+                   int new_action = choose_action(current_player);
                    do_action(current_player, new_action);
                    break;
                 
@@ -155,7 +196,7 @@ namespace game{
             case 2: {
                 if(current_player->get_sanction()){
                     std::cout<<"You are blocked! cannot use tax.";
-                    int new_action = choose_action();
+                    int new_action = choose_action(current_player);
                     do_action(current_player, new_action);
                     break;
                 }
@@ -180,8 +221,33 @@ namespace game{
             }
             
             case 4: {
+                if(current_player->get_coins() < 4){
+                    std::cout<<"C'ant use bribe, you d'ont have enough money."
+                    choose_action(current_player);
+                    break;
+                }
                 action::Bribe bribe(this, current_player);
                 bribe.execute();
+                break;
+            }
+            case 5: {
+                if(current_player->get_coins() < 3){
+                    std::cout<<"C'ant use sanction, you d'ont have enough money."
+                    choose_action(current_player);
+                    break;
+                }
+                action::Sanction sanction(this, current_player);
+                Sanction.execute();
+                break;
+            }
+            case 6: {
+                if(current_player->get_coins() < 7){
+                    std::cout<<"C'ant use coup, you d'ont have enough money."
+                    choose_action(current_player);
+                    break;
+                }
+                action::Coup coup(this, current_player);
+                coup.execute();
                 break;
             }
         
