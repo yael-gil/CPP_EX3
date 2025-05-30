@@ -1,7 +1,10 @@
 //yaeldorani@gmail.com
 #include <iostream>
 
+
+#include "Enum_role.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 #include "Action.hpp"
 #include "Gather.hpp"
 #include "Tax.hpp"
@@ -14,7 +17,7 @@ namespace game{
     
     int Game::ID = 0;
 
-    Game:: Game(std::string& game_name){
+    Game::Game(std::string game_name){
 
         name = game_name;
         id = ID++;
@@ -25,52 +28,73 @@ namespace game{
     }
 
     void Game::add_player(player::Player* player){
-        for (int i = 0; i < this->players.size(); i++){
-            if(players[i]->get_name() == player->get_name()){ //If player's name == player's name in game, add to the list
+        for (int i = 0; i < this->players_list.size(); i++){
+            if(this->players_list.size() >= 6){
+                throw std::runtime_error("The game is full, you cannot add more players. \n"
+);
+            }
+            if(players_list[i]->get_name() == player->get_name()){ //If player's name == player's name in game, add to the list
                 throw std::runtime_error("This name is taken, there is a player in the current game with that name. \n"
                     "Please choose a different name.");
             }
         }
-        this->players.push_back(player); // Add a new player to the game
+        this->players_list.push_back(player); // Add a new player to the game
     }
 
     //Create the turn vector
-    std::vector<player::Player*> Game::create_turns(){
-        
-            this->turn = this->players;
-       
-        return this->turn;
-    } 
+    std::vector<player::Player*> Game::create_turns() {
+        return filter_active(turn);
+    }
 
-    //Returns all players in the game wuth a specific role
-    const std::vector<player::Player*> Game::get_player_in_game_by_role(std::string& role){
-        std::vector<player::Player*> return_role; 
-        for (int i = 0; i < this->players.size(); i++){
-            if(players[i]->get_role() == role){ //If player's role == role, add to the list
-                return_role.push_back(players[i]);
+    //Filter the active player
+    std::vector<player::Player*> Game::filter_active(const std::vector<player::Player*>& list) const {
+        std::vector<player::Player*> result;
+        for (int i = 0; i < list.size(); i++) {
+            if (list[i]->is_active()) {
+                result.push_back(list[i]);
             }
         }
-        return return_role;
+        return result;
+    }
+
+
+    //Returns all players in the game wuth a specific role
+    const std::vector<player::Player*> Game::get_player_in_game_by_role(Enum_role role) {
+        std::vector<player::Player*> active = filter_active(players_list);
+        std::vector<player::Player*> result;
+        for (int i = 0; i < active.size(); i++) {
+            if (active[i]->get_role() == role) { //If player's role == role, add to the list
+                result.push_back(active[i]);
+            }
+        }
+        return result;
     }
 
     //Return all players in the game
-    const std::vector<player::Player*> Game::get_player_in_game(){
-    
-        return this->players;
+    std::vector<player::Player*> Game::players() {
+        return filter_active(players_list);
     }
 
+
     // Return current turn
-    player::Player* Game::turns(){
-        if(!turn.empty()){
+    player::Player* Game::turns() {
+       return this->get_turns()[0];
+    }
+
+    player::Player* Game::next_turns() {
+    // Return next turn
+        while (!turn.empty()) {
         player::Player* current = turn.front();
         turn.erase(turn.begin());
-        return current;
+        turn.push_back(current);
+        if (current->is_active()) {
+            return current;
         }
-        return nullptr;
-    } 
-    
+    }
+    throw std::runtime_error("No active players remain.");
+}
     //Get the turn vector
-    std::vector<player::Player*> Game::get_turns(){
+    std::vector<player::Player*>& Game::get_turns(){
         return this->turn;
     } 
 
@@ -82,7 +106,7 @@ namespace game{
         this->last_arrest = new_arrest;
     }
 
-    void Game::play_game(){
+   /* void Game::play_game(){
         
         this->create_turns(); //At the beginning of the game, a create turn 
 
@@ -93,7 +117,7 @@ namespace game{
             
             //print current player's name and role
             std::cout<<"Current player: "<< current_player->get_name()<<std::endl;
-            std::cout<<"role: "<< current_player->get_role()<<std::endl;
+            std::cout<<"role: "<< current_player->role_to_string(current_player->get_role()) <<std::endl;
 
             //add swich case by role to spaicel actions
 
@@ -115,11 +139,11 @@ namespace game{
 
        //Add wining and finish game
 
-
-
     }
+       */
 
-    int Game::choose_action(player::Player* current){
+        
+    int Game::choose_action(player::Player* current, int action_from_Gui){
         //print action
         std::cout<<"Choose Action: (number)"<<std::endl;
 
@@ -163,27 +187,23 @@ namespace game{
         }
 
         //Current player choose action
-        int action;
 
         while(true){
-            std::cin >> action;
 
-            if(action >= 1 && action <= 6 && good[action]){
-                return action;
+            if(action_from_Gui >= 1 && action_from_Gui <= 6 && good[action_from_Gui]){
+                return action_from_Gui;
             }
-            std::cout<<"Can't use this action, please choose another action."<<std::endl;
+            throw std::runtime_error("Can't use this action.");
             }
     }
     
-    void Game::do_action(player::Player* current_player, int action){
+    void Game::do_action(player::Player* current_player, int action, int optional_target){
         //Do action acording to player's decision
         switch (action)
         {
             case 1: {
                 if(current_player->get_sanction()){
-                   std::cout<<"You are blocked! cannot use gather."<<std::endl;
-                   int new_action = choose_action(current_player);
-                   do_action(current_player, new_action);
+                   throw std::runtime_error("You are blocked! cannot use gather.");
                    break;
                 
                 }
@@ -194,9 +214,7 @@ namespace game{
 
             case 2: {
                 if(current_player->get_sanction()){
-                    std::cout<<"You are blocked! cannot use tax."<<std::endl;
-                    int new_action = choose_action(current_player);
-                    do_action(current_player, new_action);
+                    throw std::runtime_error("You are blocked! cannot use tax.");
                     break;
                 }
                 action::Tax tax(this, current_player);
@@ -209,23 +227,16 @@ namespace game{
                 
                 std::cout<<"Choose player to attack: "<<std::endl;
 
-                for (int i = 0; i < this->get_player_in_game().size(); i++){
-                    std::cout<<i+1<<": "<<this->get_player_in_game()[i]->get_name();
+                if(optional_target < 1 || optional_target > this->players_list.size()){
+                    throw std::runtime_error("Invalid target! please try again.");
                 }
-                int target;
-                std::cin >> target;
-                while(target < 1 || target > this->players.size()){
-                    std::cout<<"Invalid target! please try again."<<std::endl;
-                    std::cin >> target;
-                }
-                arrest.execute(this->get_player_in_game()[target-1]);
+                arrest.execute(this->players()[optional_target]);
                 break;
             }
             
             case 4: {
                 if(current_player->get_coins() < 4){
-                    std::cout<<"Can't use bribe, you don't have enough money."<<std::endl;
-                    choose_action(current_player);
+                    throw std::runtime_error("Can't use bribe, you don't have enough money.");
                     break;
                 }
                 action::Bribe bribe(this, current_player);
@@ -234,8 +245,7 @@ namespace game{
             }
             case 5: {
                 if(current_player->get_coins() < 3){
-                    std::cout<<"Can't use sanction, you don't have enough money."<<std::endl;
-                    choose_action(current_player);
+                    throw std::runtime_error("Can't use sanction, you don't have enough money.");
                     break;
                 }
 
@@ -245,8 +255,7 @@ namespace game{
             }
             case 6: {
                 if(current_player->get_coins() < 7){
-                    std::cout<<"Can't use coup, you don't have enough money."<<std::endl;
-                    choose_action(current_player);
+                    throw std::runtime_error("Can't use coup, you don't have enough money.");
                     break;
                 }
                 action::Coup coup(this, current_player);
@@ -261,4 +270,78 @@ namespace game{
         }
     }
 
+    void Game::special_operations(player::Player* current , bool want_to_invest, int optional_target) {
+        switch (current->get_role())
+        {
+        case Enum_role::Baron:
+            {
+                if(want_to_invest){
+
+                    if (current->get_coins() >= 3){
+                        current->do_invest();
+                        break;
+                    }
+                    else{
+                        throw std::runtime_error("You don't have enough money, can't invest.");
+                    }
+                }
+
+                else{
+                    break;
+                }
+            }
+        case Enum_role::Spy:
+            {
+                if(want_to_invest){
+                    if(optional_target < 1 || optional_target > this->players_list.size()){
+                        throw std::runtime_error("Invalid target! please try again.");
+                    }
+                
+                    current->peek(players_list[optional_target]);
+                    break;
+                }
+
+                else{
+                    break;
+                }
+            }
+
+        case Enum_role::Merchant:
+            {
+                if(current->get_coins() >= 3){
+                    current->set_coins(1);
+                    break;
+                }
+
+                else{
+                    break;
+                }
+            }
+        case Enum_role::General:
+            {
+
+            break;
+            }
+        case Enum_role::Governor:
+            {
+
+            break;
+            }
+        case Enum_role::Judge:
+            {
+
+            break;
+            }
+        }
+    } 
+
+    std::string Game::winner(){
+        std::vector <player::Player*> current = filter_active(players_list);
+        if(current.size() == 1){
+            return current[0]->get_name(); //Return the winner's name
+        } 
+        else {
+            return "No winner yet.";
+        }
+    }
 }

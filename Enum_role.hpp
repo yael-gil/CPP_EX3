@@ -1,4 +1,6 @@
-#include <iostream>
+
+#ifndef ENUM_ROLE_HPP
+#define ENUM_ROLE_HPP
 
 enum class Enum_role{
     Governor,
@@ -8,3 +10,5 @@ enum class Enum_role{
     Judge,
     Merchant 
 };
+
+#endif

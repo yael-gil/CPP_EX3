@@ -1,12 +1,13 @@
 //yaeldorani@gmail.com
 
-#include "Action.hpp"
+
 #include <iostream>
 #include "Sanction.hpp"
 #include <stdexcept>
-
 #include <string>
 
+#include "Action.hpp"
+#include "Enum_role.hpp"
 namespace action{
  
 
@@ -22,8 +23,19 @@ void Sanction::execute(player::Player* target){
     player:: Player* current = this->get_source();
 
     if (target != nullptr){ 
-        target->set_coins(-3); //Pay 3 coins
-        target->set_sanction(true);
+      
+     
+      this->get_source()->set_coins(-3); //Pay 3 coins
+      target->set_sanction(true);
+      
+      if(target->get_role() == Enum_role::Judge){ //pay 1 more coin if the target is judge 
+              current->set_coins(-1);
+      }
+
+      if (target->get_role() == Enum_role::Baron){ //Compensation to Baron
+        target->set_coins(1);  
+      }
+      
     }
 
     else{

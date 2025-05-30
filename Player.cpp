@@ -4,20 +4,19 @@
 #include <random>
 
 #include "Player.hpp"
-#include "Enum_role.cpp"
-
+#include "Enum_role.hpp"
+#include "Game.hpp"
 namespace player{
     
     int Player::ID = 0;
 
-        Player::Player(std::string name, game::Game *game, const std::string& role_name): role_name(role_name) {
+        Player::Player(std::string name, game::Game* game) {
             this->name = name;
             id = ID++;
             coins = 0; //Intializing the coins to 0 
             sanction = false; 
             this->game = game;
             this->set_role(get_random_role());//Initilize role
-            *game->add_player(this); // Add the player to the current game
         }
 
         Player::~Player() {
@@ -63,7 +62,7 @@ namespace player{
             return this->sanction;
         }
 
-        // change place
+        // Set the player's sanction status
         void Player::set_sanction(bool sanction){
             this->sanction = sanction;
         }
@@ -81,6 +80,63 @@ namespace player{
         return false;
     }
 
+    // Convert role to string
+    std::string Player::role_to_string(Enum_role role){
+        switch (role)
+        {
+        case Enum_role::Governor: {
+            return "Governor";
+            break;
+        }
+    
+        case Enum_role::Baron: {
+            return "Baron";
+            break;
+        }
+
+        case Enum_role::Spy: {
+            return "Spy";
+            break;
+        }
+
+        case Enum_role::General: {
+            return "General";
+                break;
+        }
+        case Enum_role::Judge: {
+            return "Judge";
+                break;
+        }
+        case Enum_role::Merchant: {
+            return "Merchant";
+                break;
+        }
+        default:
+            break;
+        }
+    }
+     // Check if the player is active
+    bool Player::is_active() const { return this->active; }
+    
+    // Set player active or inactive
+    void Player::set_active(bool is_active) { this->active = is_active; } 
+
+
+bool Player::block_coup(Player* player) {
+    return false;
+}
+
+bool Player::block_bribe(Player* player) {
+    return false;
+}
+
+void Player::do_invest() {
+    // do nothing by default
+}
+
+int Player::peek(Player* player) {
+    return -1; // or some sentinel value
+}
 
 }
 

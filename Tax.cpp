@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 #include "Tax.hpp"
-#include "Enum_role.cpp"
+#include "Enum_role.hpp"
 
 namespace action{
  
@@ -17,7 +17,7 @@ namespace action{
   Tax::~Tax(){}
    
   //The player takes two coin from the pot, the action can be blocked by "sanction"
-  void action::Tax::execute(){
+  void Tax::execute(){
     if (!this->get_source()->get_sanction()){ // Checks if the player has been sanction
       
       if(this->get_source()->get_role() == Enum_role::Governor){
@@ -25,8 +25,7 @@ namespace action{
         return; 
       }
 
-      // Find governor in game להוציא החוצה? לחשב את הכל כבר במחלקת המשחק?
-      std::vector<player::Player*> governor_in_game = this->get_action_game()->get_player_in_game_by_role("Governor");
+      std::vector<player::Player*> governor_in_game = this->get_action_game()->get_player_in_game_by_role(Enum_role::Governor);
       
       // Ask governors to block
       for(int i = 0; i < governor_in_game.size(); i++){
@@ -45,7 +44,7 @@ namespace action{
   }
 
   //Tax is not performed on another player
-  void execute(player::Player* target) {
+  void Tax::execute(player::Player* target) {
     throw std::runtime_error("Tax is not performed on another player.");
   }
  

@@ -24,7 +24,7 @@ class Spy : public Player{
 
         virtual ~Spy();
 
-        int peek(Player* player);
+        int peek(Player* player) override;
 };
 }
 

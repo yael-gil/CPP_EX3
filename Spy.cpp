@@ -11,13 +11,13 @@
 namespace player{
 
 
-    Spy::Spy(std::string name, game::Game* game, const std::string& role_name): Player(name, game, "Spy"){
+    Spy::Spy(std::string name, game::Game* game, const std::string& role_name): Player(name, game){
     }
     
 
     Spy:: ~Spy(){}
     
-    //איך זה עובד הקטע עם המעצר של המרגל?
+    //The spy can peek in another player coins, not cost anything and not consider a turn.
     int Spy::peek(Player* player){
         return player->get_coins();
     }

@@ -22,9 +22,20 @@ namespace action{
 
       player::Player* current = this->get_source();
 
-      if (target != nullptr && this->get_action_game()->get_last_arrest() != target->get_name()){ 
-          target->set_coins(-1); //Take coin from the target
+      if (target != nullptr && this->get_action_game()->get_last_arrest() != target->get_name()){
+
+          // If it's a general, don't take a coin off
+          if(target->get_role() != Enum_role::General){
+            target->set_coins(-1); //Take coin from the target
+          }
+          if(target->get_role() == Enum_role::Merchant){
+            target->set_coins(-1); //Take one more coin from merchant
+          }
+
+          if(target->get_role() != Enum_role::Merchant){// If it's a merchant, current player can't take coin 
           current->set_coins(1); //Add the coin to current 
+          }
+
           this->get_action_game()->set_last_arrest(target->get_name());
       }
       else{

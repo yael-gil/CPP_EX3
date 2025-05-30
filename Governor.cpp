@@ -11,7 +11,7 @@
 namespace player{
 
 
-    Governor::Governor(std::string name, game::Game* game): Player(name, game, "Governor"){
+    Governor::Governor(std::string name, game::Game* game): Player(name, game){
     }
     
 
@@ -21,7 +21,7 @@ namespace player{
 
         if (true){
             std::cout<< "Governor blocks tax";
-            player->do_sanction();
+            player->set_sanction(true); // Block the player
             return true;
         }
         return false;

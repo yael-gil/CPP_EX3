@@ -15,7 +15,7 @@ namespace action{
   Gather::~Gather(){}
    
   //The player takes one coin from the pot, the action can be blocked by "sanction"
-  void action::Gather::execute(){
+  void Gather::execute(){
     if (!this->get_source()->get_sanction()){ // Checks if the player has been sanction
       this->get_source()->set_coins(1); // Add coin 
     } else {
@@ -23,7 +23,7 @@ namespace action{
     }
   }
 
-   void execute(player::Player* target) {
+   void Gather::execute(player::Player* target) {
     throw std::runtime_error("Gather is not performed on another player.");
   }
  
